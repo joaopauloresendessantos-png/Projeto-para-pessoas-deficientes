@@ -19,11 +19,33 @@ img {
     border-radius: 12px;
 }
 
+.animal {
+    cursor: pointer;
+}
+
+.blink {
+    animation: blink 0.5s ease-in-out infinite;
+}
+
+.correct {
+    box-shadow: 0 0 15px 5px rgba(0, 255, 0, 0.5);
+}
+
+.wrong {
+    box-shadow: 0 0 15px 5px rgba(255, 0, 0, 0.5);
+}
+
+.message {
+    grid-column: 1 / -1;
+    text-align: center;
+    font-size: 18px;
+    color: white;
+    text-shadow: 0 0 5px rgba(0, 0, 0, 0.7);
+}
+
 button {
-    place-items: center;
-    justify-content: center;
-    align-content: center;
-    background-position: center;
+    grid-column: 1 / -1;
+    justify-self: center;
     padding: 10px 20px;
     font-size: 16px;
     background-color: #4CAF50;
@@ -31,4 +53,9 @@ button {
     border: none;
     border-radius: 5px;
     cursor: pointer;
+}
+
+@keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
 }

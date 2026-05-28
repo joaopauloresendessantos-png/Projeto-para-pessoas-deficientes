@@ -4,19 +4,92 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="">
     <title>Projeto P.C.D.</title>
 </head>
 <body>
+    <div class="message" id="message">Clique em Começar para jogar</div>
 
-    <img src="baleia.jpeg" alt="baleia" height="100" width="150">
-    <img src="dinossauro.jpeg" alt="dinossauro" height="100" width="150">
-    <img src="macaco.jpeg" alt="macaco" height="100" width="150">
-    <img src="passarinho.jpeg" alt="passarinho" height="100" width="150">
-    <img src="vaca.jpeg" alt="vaca" height="100" width="150">
-    <img src="galinha.jpeg" alt="galinha" height="100" width="150">
+    <img class="animal" src="baleia.jpeg" alt="baleia" data-animal="baleia" height="100" width="150">
+    <img class="animal" src="dinossauro.jpeg" alt="dinossauro" data-animal="dinossauro" height="100" width="150">
+    <img class="animal" src="macaco.jpeg" alt="macaco" data-animal="macaco" height="100" width="150">
+    <img class="animal" src="passarinho.jpeg" alt="passarinho" data-animal="passarinho" height="100" width="150">
+    <img class="animal" src="vaca.jpeg" alt="vaca" data-animal="vaca" height="100" width="150">
+    <img class="animal" src="galinha.jpeg" alt="galinha" data-animal="galinha" height="100" width="150">
 
-    <button>Começar(tab)</button>
+    <button id="startButton">Começar</button>
 
+    <script>
+        const message = document.getElementById('message');
+        const startButton = document.getElementById('startButton');
+        const animals = Array.from(document.querySelectorAll('.animal'));
+        let currentAnimal = null;
+        let gameActive = false;
+
+        function speak(text) {
+            if ('speechSynthesis' in window) {
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.rate = 1;
+                window.speechSynthesis.cancel();
+                window.speechSynthesis.speak(utterance);
+            }
+        }
+
+        function playTone(type) {
+            const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            const oscillator = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            oscillator.connect(gain);
+            gain.connect(audioCtx.destination);
+            if (type === 'win') {
+                oscillator.frequency.value = 880;
+            } else {
+                oscillator.frequency.value = 220;
+            }
+            gain.gain.value = 0.1;
+            oscillator.start();
+            oscillator.stop(audioCtx.currentTime + 0.15);
+        }
+
+        function showNextAnimal() {
+            animals.forEach(el => el.classList.remove('blink'));
+            currentAnimal = animals[Math.floor(Math.random() * animals.length)];
+            currentAnimal.classList.add('blink');
+            message.textContent = 'Escute o som e clique no animal certo';
+            speak(currentAnimal.dataset.animal);
+        }
+
+        animals.forEach(img => {
+            img.addEventListener('click', () => {
+                if (!gameActive) {
+                    message.textContent = 'Clique em Começar para iniciar o jogo';
+                    return;
+                }
+                const selected = img.dataset.animal;
+                if (!currentAnimal) return;
+                if (selected === currentAnimal.dataset.animal) {
+                    img.classList.add('correct');
+                    playTone('win');
+                    speak('Correto');
+                    message.textContent = 'Acertou! Próximo animal...';
+                    setTimeout(() => {
+                        img.classList.remove('correct');
+                        showNextAnimal();
+                    }, 1000);
+                } else {
+                    img.classList.add('wrong');
+                    playTone('wrong');
+                    speak('Errado');
+                    message.textContent = 'Errado! Tente de novo';
+                    setTimeout(() => img.classList.remove('wrong'), 400);
+                }
+            });
+        });
+
+        startButton.addEventListener('click', () => {
+            gameActive = true;
+            message.textContent = 'Jogo iniciado! Ouça e clique no animal certo';
+            showNextAnimal();
+        });
+    </script>
 </body>
 </html>
