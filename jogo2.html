@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jogo Inclusivo</title>
+
+  <style>
+    body{
+      margin:0;
+      height:100vh;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      flex-direction:column;
+      background:#000;
+      color:#fff;
+      font-family:Arial, sans-serif;
+      text-align:center;
+    }
+
+    h1{
+      font-size:40px;
+    }
+
+    p{
+      font-size:22px;
+      max-width:600px;
+      padding:10px;
+    }
+
+    #area{
+      width:250px;
+      height:250px;
+      background:#444;
+      border:6px solid #fff;
+      border-radius:20px;
+      margin-top:20px;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      font-size:30px;
+      font-weight:bold;
+      transition:0.3s;
+    }
+
+    #pontos{
+      margin-top:20px;
+      font-size:30px;
+    }
+
+    button{
+      margin-top:20px;
+      padding:15px 30px;
+      font-size:24px;
+      border:none;
+      border-radius:10px;
+      cursor:pointer;
+      background:#00ff88;
+      color:#000;
+      font-weight:bold;
+    }
+  </style>
+</head>
+
+<body>
+
+  <h1>Jogo Tátil Inclusivo</h1>
+
+  <p>
+    Quando a tela mudar para VERDE e vibrar,
+    toque em qualquer lugar da caixa.
+  </p>
+
+  <div id="area">ESPERE</div>
+
+  <div id="pontos">Pontos: 0</div>
+
+  <button onclick="iniciarJogo()">
+    Iniciar
+  </button>
+
+<script>
+
+let podeTocar = false;
+let pontos = 0;
+
+const area = document.getElementById("area");
+const pontosTexto = document.getElementById("pontos");
+
+function iniciarJogo(){
+
+  area.innerHTML = "ESPERE";
+  area.style.background = "#444";
+  podeTocar = false;
+
+  let tempo = Math.random() * 4000 + 2000;
+
+  setTimeout(() => {
+
+    area.innerHTML = "TOQUE";
+    area.style.background = "#00cc66";
+
+    podeTocar = true;
+
+    // vibração acessível
+    if(navigator.vibrate){
+      navigator.vibrate([300,100,300]);
+    }
+
+  }, tempo);
+}
+
+area.addEventListener("click", () => {
+
+  if(podeTocar){
+
+    pontos++;
+
+    pontosTexto.innerHTML = "Pontos: " + pontos;
+
+    area.innerHTML = "ACERTOU";
+
+    if(navigator.vibrate){
+      navigator.vibrate(200);
+    }
+
+    iniciarJogo();
+
+  }else{
+
+    pontos = 0;
+
+    pontosTexto.innerHTML = "Muito cedo!";
+
+    if(navigator.vibrate){
+      navigator.vibrate([100,50,100,50,100]);
+    }
+
+  }
+
+});
+
+</script>
+
+</body>
+</html>

@@ -24,14 +24,16 @@
         const animals = Array.from(document.querySelectorAll('.animal'));
         let currentAnimal = null;
         let gameActive = false;
+        let currentAudio = null;
 
-        function speak(text) {
-            if ('speechSynthesis' in window) {
-                const utterance = new SpeechSynthesisUtterance(text);
-                utterance.rate = 1;
-                window.speechSynthesis.cancel();
-                window.speechSynthesis.speak(utterance);
+        // Função para tocar o som do animal
+        function playAnimalSound(animal) {
+            if (currentAudio) {
+                currentAudio.pause();
+                currentAudio.currentTime = 0;
             }
+            currentAudio = new Audio(`${animal}.mp3`);
+            currentAudio.play();
         }
 
         function playTone(type) {
@@ -40,11 +42,7 @@
             const gain = audioCtx.createGain();
             oscillator.connect(gain);
             gain.connect(audioCtx.destination);
-            if (type === 'win') {
-                oscillator.frequency.value = 880;
-            } else {
-                oscillator.frequency.value = 220;
-            }
+            oscillator.frequency.value = (type === 'win') ? 880 : 220;
             gain.gain.value = 0.1;
             oscillator.start();
             oscillator.stop(audioCtx.currentTime + 0.15);
@@ -55,7 +53,7 @@
             currentAnimal = animals[Math.floor(Math.random() * animals.length)];
             currentAnimal.classList.add('blink');
             message.textContent = 'Escute o som e clique no animal certo';
-            speak(currentAnimal.dataset.animal);
+            playAnimalSound(currentAnimal.dataset.animal);
         }
 
         animals.forEach(img => {
@@ -69,7 +67,6 @@
                 if (selected === currentAnimal.dataset.animal) {
                     img.classList.add('correct');
                     playTone('win');
-                    speak('Correto');
                     message.textContent = 'Acertou! Próximo animal...';
                     setTimeout(() => {
                         img.classList.remove('correct');
@@ -78,17 +75,26 @@
                 } else {
                     img.classList.add('wrong');
                     playTone('wrong');
-                    speak('Errado');
                     message.textContent = 'Errado! Tente de novo';
                     setTimeout(() => img.classList.remove('wrong'), 400);
                 }
             });
         });
 
-        startButton.addEventListener('click', () => {
+        function startGame() {
+            if (gameActive) return; // evita reiniciar várias vezes
             gameActive = true;
             message.textContent = 'Jogo iniciado! Ouça e clique no animal certo';
             showNextAnimal();
+        }
+
+        startButton.addEventListener('click', startGame);
+
+        // Iniciar também com a tecla espaço
+        document.addEventListener('keydown', (event) => {
+            if (event.code === 'Space') {
+                startGame();
+            }
         });
     </script>
 </body>
