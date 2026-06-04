@@ -3,67 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="jogo2.css">
   <title>Jogo Inclusivo</title>
-
-  <style>
-    body{
-      margin:0;
-      height:100vh;
-      display:flex;
-      justify-content:center;
-      align-items:center;
-      flex-direction:column;
-      background:#000;
-      color:#fff;
-      font-family:Arial, sans-serif;
-      text-align:center;
-    }
-
-    h1{
-      font-size:40px;
-    }
-
-    p{
-      font-size:22px;
-      max-width:600px;
-      padding:10px;
-    }
-
-    #area{
-      width:250px;
-      height:250px;
-      background:#444;
-      border:6px solid #fff;
-      border-radius:20px;
-      margin-top:20px;
-      display:flex;
-      justify-content:center;
-      align-items:center;
-      font-size:30px;
-      font-weight:bold;
-      transition:0.3s;
-    }
-
-    #pontos{
-      margin-top:20px;
-      font-size:30px;
-    }
-
-    button{
-      margin-top:20px;
-      padding:15px 30px;
-      font-size:24px;
-      border:none;
-      border-radius:10px;
-      cursor:pointer;
-      background:#00ff88;
-      color:#000;
-      font-weight:bold;
-    }
-  </style>
 </head>
 
 <body>
+
+  <button onclick="window.location.href='index.html'">Jogo Anterior</button>
 
   <h1>Jogo Tátil Inclusivo</h1>
 
@@ -103,7 +49,6 @@ function iniciarJogo(){
 
     podeTocar = true;
 
-    // vibração acessível
     if(navigator.vibrate){
       navigator.vibrate([300,100,300]);
     }
@@ -142,6 +87,10 @@ area.addEventListener("click", () => {
 });
 
 </script>
+
+<footer>
+  <p>Créditos: <br><br>João Paulo <br>Asterio <br></p>
+</footer>
 
 </body>
 </html>

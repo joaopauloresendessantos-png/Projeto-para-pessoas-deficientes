@@ -7,7 +7,9 @@
     <title>Projeto P.C.D.</title>
 </head>
 <body>
-    <div class="message" id="message">Clique em Começar para jogar</div>
+    <div class="message" id="message">Clique em Começar ou aperte Espaço</div>
+
+    <button onclick="window.location.href='jogo2.html'">Proximo Jogo</button>
 
     <img class="animal" src="baleia.jpeg" alt="baleia" data-animal="baleia" height="100" width="150">
     <img class="animal" src="dinossauro.jpeg" alt="dinossauro" data-animal="dinossauro" height="100" width="150">
@@ -16,7 +18,7 @@
     <img class="animal" src="vaca.jpeg" alt="vaca" data-animal="vaca" height="100" width="150">
     <img class="animal" src="galinha.jpeg" alt="galinha" data-animal="galinha" height="100" width="150">
 
-    <button id="startButton">Começar</button>
+    <button id="startButton">Começar (Espaço)</button>
 
     <script>
         const message = document.getElementById('message');
@@ -26,7 +28,7 @@
         let gameActive = false;
         let currentAudio = null;
 
-        // Função para tocar o som do animal
+      
         function playAnimalSound(animal) {
             if (currentAudio) {
                 currentAudio.pause();
@@ -82,7 +84,7 @@
         });
 
         function startGame() {
-            if (gameActive) return; // evita reiniciar várias vezes
+            if (gameActive) return;
             gameActive = true;
             message.textContent = 'Jogo iniciado! Ouça e clique no animal certo';
             showNextAnimal();
@@ -90,12 +92,17 @@
 
         startButton.addEventListener('click', startGame);
 
-        // Iniciar também com a tecla espaço
+       
         document.addEventListener('keydown', (event) => {
             if (event.code === 'Space') {
                 startGame();
             }
         });
     </script>
+
+    <footer>
+    <p>Créditos: <br><br>João Paulo <br>Asterio <br></p>
+    </footer>
+
 </body>
 </html>
